@@ -1,0 +1,26 @@
+#!/Library/Frameworks/Python.framework/Versions/3.5/bin/python3
+
+import requests
+from subprocess import call
+from sys import argv
+if len(argv) != 2:
+	print("URL is needed")
+	exit()
+
+url = argv[1]
+
+def find_url(url):
+	resp = requests.head(url)
+	if resp.status_code>=300:
+		for key in resp.headers:
+			if key.lower() == "location":
+				return find_url(resp.headers[key])
+	if resp.status_code==200:
+		return url
+
+	return ""
+
+print("Finding actual URL")
+url = find_url(url)
+print("Actual URL is:", url, "\nNow downloading")
+call(["axel", "-n", "20", url])
