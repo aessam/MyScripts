@@ -1,0 +1,7 @@
+if [ -z "${1}" ] 
+then
+	passlen=32
+else
+	passlen=${1}
+fi
+dd if=/dev/urandom bs=4098 count=200 of=/dev/stdout|base64|head -c $passlen ; echo
