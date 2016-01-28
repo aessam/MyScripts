@@ -1,0 +1,48 @@
+#!/bin/sh
+
+
+
+sizesNames=( "drawable-xhdpi" "drawable-hdpi" "drawable-mdpi" )
+sizesValues=( 66% 50% 33% )
+
+
+# Create Folder if not exist
+function cin {
+	if ! [ -e $1 ]; then
+		mkdir $1
+	fi
+}
+
+# Create assest folders
+function cds {
+	for item in $(seq 0 $((${#sizesNames[@]} - 1)))
+		do cin ${sizesNames[$item]}
+	done
+	cin "drawable-xxhdpi"
+}
+
+function fixImage {
+	if [ -n "$1" ]; then
+	echo " Processing asset "$1" ..."
+	if [ -e $1 ]; then
+		for item in $(seq 0 $((${#sizesNames[@]} - 1)))
+		do 
+			convert $1 -resize ${sizesValues[$item]} ${sizesNames[$item]}/$1
+		done
+    	mv $1 drawable-xxhdpi/$1
+	else
+		echo "Can't find file."
+	fi
+else
+	echo "Please set the xxhdpi file name."
+fi
+}
+
+# Creating folders 
+cds
+
+# Loop through the images and fix it for each size
+for f in *.png
+do
+	fixImage $f  
+done
