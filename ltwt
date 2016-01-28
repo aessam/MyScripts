@@ -1,0 +1,3 @@
+x=`t accounts`
+IFS=' ' read -a y <<< "$x"
+t timeline $y -n1
