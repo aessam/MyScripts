@@ -1,0 +1,1 @@
+pbpaste|wc -c
