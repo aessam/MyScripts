@@ -1,0 +1,8 @@
+#!/Library/Frameworks/Python.framework/Versions/3.4/bin/python3
+import sys
+import urllib.parse
+#print(urllib.parse.quote(sys.argv[1][7:]))
+if len(sys.argv)>=2:
+    print(urllib.parse.quote(sys.argv[1][7:]))
+else:
+    print("No valid args\n usage is " + __file__ + " [URL]")
