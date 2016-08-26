@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+
+from time import sleep
+from socket import setdefaulttimeout, AF_INET, SOCK_STREAM, socket
+
+def check_network_availability(host="8.8.8.8", port=53, timeout=3):
+    try:
+        setdefaulttimeout(timeout)
+        socket(AF_INET, SOCK_STREAM).connect((host, port))
+        return True
+    except Exception as ex:
+        pass
+    return False
+
+states = ["\033[0;31mdown\033[0m", "\033[0;34mup  \033[0m"]
+
+
+try:
+	while True:
+		print("Network is " + states[int(check_network_availability())], end="\r")
+		sleep(1)
+except KeyboardInterrupt as ex:
+	print("\nHow dare you? I am leaving.")
