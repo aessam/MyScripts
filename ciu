@@ -12,7 +12,7 @@ def check_network_availability(host="8.8.8.8", port=53, timeout=3):
         pass
     return False
 
-states = ["\033[0;31mdown\033[0m", "\033[0;34mup  \033[0m"]
+states = ["\033[0;31mdown\033[0m", "\033[32mup  \033[0m"]
 
 
 try:
