@@ -1,0 +1,30 @@
+#!/usr/bin/env python3
+from sys import argv
+import re
+import glob
+
+
+initial = ""
+if len(argv)>1:
+	initial = argv[1]
+instances_finder = re.compile(initial + "\w* ?\*\)?(\w*)")
+
+
+def process_class(couples):
+	for cls in couples:
+		found = instances_finder.findall(open(couples[cls]["h"]).read())
+		print (found)
+#	if len(found)>0:
+#		result[filename] = found
+
+
+result = {} 
+couples = {}
+allowed = ["h", "m"]
+
+for filename in glob.iglob('./**', recursive=True):
+	if filename[-1].lower() in allowed:
+		filename_clean = filename.split("/")[-1].split(".")[0]
+		couples.setdefault(filename_clean, {})[filename[-1].lower()] = filename
+
+print(list(filter(lambda x: len(couples[x])>1, couples)))

@@ -1,0 +1,62 @@
+#!/usr/local/bin/node
+
+var spawn = require('child_process').spawn;
+var ytdl   = require('youtube-dl');
+
+function queryString(qStr){
+	var ret = {};
+	qStr = qStr.split("#")[0];
+	var parts = qStr.indexOf("?");
+	if(parts>=0){
+		var vars = qStr.substr(parts+1).split("&");
+		for(var v in vars){
+			if((iV = vars[v].indexOf("="))>0){
+				ret[vars[v].substr(0,iV)] = vars[v].substr(iV+1);
+			}
+		}
+	}
+	return ret;
+}
+
+function getVidInfo(videURL){
+
+	if(videURL.indexOf("youtu")>=0){
+		var qs = queryString(videURL);
+		var video  = 'http://www.youtube.com/watch?v=' + qs.v;
+		ytdl.getFormats(video, function(err, info){
+			if(err!=undefined)
+				console.log("Error while getting info")
+			var m4a = 0;
+			var other = 0;
+			for(vid in info){
+				if(info[vid].resolution.indexOf("audio")>=0){
+					console.log( info[vid].filetype + ": youtube-dl -F " + info[vid].itag + " http://www.youtube.com/watch?v=" + qs.v);
+//					if(info[vid].filetype=="m4a"){
+//						m4a = info[vid].itag;
+//					}else{
+//						other = info[vid].itag;
+//					}
+				}
+			}
+//			if(m4a==0){
+//				m4a = other;
+//			}
+//			console.log("youtube-dl -F " + m4a + " http://www.youtube.com/watch?v=" + qs.v);
+		});
+	}else{
+		console.log("Can't find video URL in paramters or clipboard.");
+	}
+}
+
+if(process.argv.length==3){	
+	getVidInfo (process.argv[2]);
+}else if(process.argv.length==2){
+	pbpaste = spawn("pbpaste");
+	pbpaste.stdout.on('data', function (data) {
+	  	if(data.length>20){
+			getVidInfo(data.toString());
+		}else{
+			console.log("Too short for URL.");
+		}
+	});
+}

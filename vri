@@ -1,0 +1,8 @@
+if [ -z "${1}" ] 
+then
+	vid=`pbpaste`
+else
+	vid=${1}
+fi
+
+youtube-dl -F $vid

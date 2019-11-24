@@ -1,0 +1,23 @@
+#!/Library/Frameworks/Python.framework/Versions/3.5/bin/python3
+
+from json import loads, dumps
+import sys
+ret = []
+def loop(data, path):
+    global ret
+    if type(data) is dict:
+        loop(data[path[0]], path[-1:])
+    elif type(data) is list:
+        for item in data:
+            if len(path)==1 and sys.argv[3].lower() in str(item[path[0]]).lower():
+                ret.append(item)
+            else:
+                loop(item[path[0]], path[-1:])
+
+if len(sys.argv)!=4:
+	print("pjson Filename.json 'path\\field_to_match' keyword")
+	exit()
+
+loop(loads(open(sys.argv[1]).read()), sys.argv[2].split("\\"))
+
+print(dumps(ret, indent=4, sort_keys=True))

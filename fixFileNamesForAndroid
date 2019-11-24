@@ -1,0 +1,66 @@
+#!/usr/local/bin/node
+
+var fs = require("fs");
+var filenames = fs.readdirSync(".");
+
+var a = "a".charCodeAt(0);
+var z = "z".charCodeAt(0);
+var c0 = "0".charCodeAt(0);
+var c9 = "9".charCodeAt(0);
+var acceptableChars = {"_":true,".":true}
+
+var bA = "A".charCodeAt(0);
+var bZ = "Z".charCodeAt(0);
+
+function between(target,from,to){
+	if(target>=from && target<=to)
+		return true;
+	return false;
+}
+
+
+var currentPath = fs.realpathSync(".").split("/");
+if(currentPath<=0)
+	process.exit()
+
+if(currentPath[currentPath.length-1].indexOf("drawable")+8 >= currentPath[currentPath.length-1].indexOf("dpi")){
+	console.log("The folder doesn't seem to be Android resource folder.")
+	process.exit()
+}
+
+for (var filenameIdx in filenames){
+	var isLastIsUnderscore = false;
+	var newName = "";
+	
+	for(var charIdx in filenames[filenameIdx]){
+		var currentChar = filenames[filenameIdx].charCodeAt(charIdx);
+		if( between(currentChar, a, z) || 
+			between(currentChar, c0, c9) || 
+			acceptableChars[filenames[filenameIdx][charIdx]]){
+			
+			newName += filenames[filenameIdx][charIdx];
+			isLastIsUnderscore = false;
+		}else{
+			if(!isLastIsUnderscore){
+				if(between(currentChar, bA, bZ)){
+					if(newName.length==0){
+						newName += filenames[filenameIdx][charIdx].toLowerCase();
+					}else{
+						newName += "_" + filenames[filenameIdx][charIdx].toLowerCase();
+						isLastIsUnderscore = true;
+					}
+				}else{
+					newName += "_";
+					isLastIsUnderscore = true;
+				}
+			}else{
+				if(between(currentChar, bA, bZ)){
+					newName += filenames[filenameIdx][charIdx].toLowerCase();
+				}
+			}
+		}
+	}
+	fs.renameSync("./" + filenames[filenameIdx], "./" + newName);
+}
+
+console.log("Filenames fixed")

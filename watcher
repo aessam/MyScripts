@@ -1,6 +1,11 @@
 #!/bin/sh
 
-seconds=3000
+if [ -z "${1}" ] 
+then
+	seconds=3000
+else
+	seconds=$((${1}))
+fi
 
 if [ ! -d "$HOME/watcher" ]; then
   mkdir "$HOME/watcher"

@@ -1,0 +1,8 @@
+#!/bin/sh
+s=`find \`pwd\` .`
+for x in $s
+do
+echo $x
+#vidsec {$x}|cut -d' ' -f1
+
+done

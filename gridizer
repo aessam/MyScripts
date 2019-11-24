@@ -1,0 +1,1 @@
+montage -geometry 272x340\>+2+2 `ls` result.png
