@@ -1,8 +1,0 @@
-#!/bin/sh
-secs=`exiftool "${1}" |grep "Media Duration"|cut -d':' -f4 -f3 -f2 |sed 's/:/ /g'| awk '{print ((($1*60)+$2)*60)+$3}'`
-tmp=`dd if=/dev/urandom bs=4098 count=200 of=/dev/stdout|shasum|head -c 10; echo`
-ffmpeg -i "${1}" -vf fps=1/$(($secs/15)) $tmp%04d.png
-montage -geometry 480x270+2+2 `ls $tmp*.png` -tile 4x4 result_$tmp.png
-rm $tmp*.png
-noxt=`a="${1}";IFS=".";set $a;echo $1`
-mv "result_$tmp.png" "$noxt.png"

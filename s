@@ -8,8 +8,8 @@
 
 if [ -z "${1}" ] 
 then
-	wordsPerMinute=500
+	wordsPerMinute=350
 else
 	wordsPerMinute=${1}
 fi
-pbpaste|say -v Alex -r $wordsPerMinute -i
+pbpaste|say -r $wordsPerMinute -i

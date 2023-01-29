@@ -4,15 +4,16 @@ then
 else
 	u=${1}
 fi
-co=`curl -s $u | grep "<title>"`
-co="${co/<title>/}"
-co="${co/<\/title>/}"
+co=`wget -qO- "$u" | perl -l -0777 -ne 'print $1 if /<title.*?>\s*(.*?)\s*<\/title/si'`
+# co=`curl -s $u | grep -e "/<title.*?>\s*(.*?)\s*<\/title/si"`
+# echo $co
+# co=`curl -s $u | grep "\<title\>"`
+# co="${co/<title>/}"
+# co="${co/<\/title>/}"
 
 if [ -n "$co" ]; then
   co="https://twitter.com/intent/tweet?text=$co"
-	open "$co $u"
+  open "$co $u"
 else
 	echo "Can't get the title"
 fi
-
-tput bel

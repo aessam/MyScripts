@@ -5,4 +5,4 @@ else
 	vid=${1}
 fi
 
-youtube-dl -F $vid
+yt-dlp -F $vid

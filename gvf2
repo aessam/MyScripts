@@ -1,1 +1,1 @@
-youtube-dl -F `pbpaste`|grep "audio"
+yt-dlp -F `pbpaste` | grep "audio"
